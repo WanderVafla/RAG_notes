@@ -18,6 +18,7 @@
           pkgs.python312
           pkgs.uv
           pkgs.git
+          pkgs.docker-compose
         ];
 
         buildInputs = [
