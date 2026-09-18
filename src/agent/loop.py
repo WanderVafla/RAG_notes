@@ -1,5 +1,6 @@
 import json
 import os
+from typing import Any
 
 from dotenv import load_dotenv
 
@@ -8,16 +9,15 @@ from tool.registry import TOOLS
 from tool.schemas import TOOL_SCHEMAS
 
 load_dotenv()
-LLM_MODEL = os.getenv('LLM_MODEL')
-
+LLM_MODEL = os.getenv('LLM_MODEL') or ''
 client = getClient();
 
-def execute_tool(name: str, arguments: dict) -> str:
+def execute_tool(name: str, arguments: dict[str, Any]) -> str:
     if name not in TOOLS:
         return f'Error: unknow tool "{name}"'
     try:
         return TOOLS[name](**arguments)
-    except Exception as e:
+    except Exception:
         return f'ErrorRunTool: "{name}"'
 
 
@@ -40,12 +40,12 @@ def run_agent(user_input, verbose: bool = True):
                 arguments = json.loads(tool_call.function.arguments)
 
                 if verbose:
-                    print(f"\n`[tool call] {name}({arguments})`")
+                    print(f"---\n`[tool call] {name}({arguments})`")
                     
                 result = execute_tool(name, arguments)
 
                 if verbose:
-                    print(f"`[tool result] {result[:200]}\n`")
+                    print(f"`[tool result] {result[:200]}`\n---")
 
 
                 messages.append({
