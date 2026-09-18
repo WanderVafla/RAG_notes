@@ -5,8 +5,10 @@ from dotenv import load_dotenv
 from llama_index.core import Settings
 from llama_index.embeddings.openai import OpenAIEmbedding
 from llama_index.llms.openrouter import OpenRouter
+
+load_dotenv()
+
 def init_settings(): 
-    _ = load_dotenv()
     api_key = os.getenv("OPENROUTER_API_KEY")
     LLM_MODEL = os.getenv("LLM_MODEL")
     

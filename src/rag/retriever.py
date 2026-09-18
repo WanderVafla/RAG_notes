@@ -10,7 +10,7 @@ from .settings import init_settings
 
 init_settings()
 
-def rag_search(query: str):
+def rag_search(query: str, limit: int):
     NOTES_FOLDER = os.getenv("NOTES_FOLDER")
     if not NOTES_FOLDER:
         sys.exit("Please set name of NOTES_FOLDER in .env")
@@ -28,7 +28,6 @@ def rag_search(query: str):
         vector_store=vectorStore.getVectorStore()
     )
         
-    query_engine = indexVectorStore.as_query_engine()
-    
-    response = query_engine.query(query)
-    return response, response.metadata
+    retriever = indexVectorStore.as_retriever(similarity_top_k=limit)
+    nodes = retriever.retrieve(query)
+    return nodes
